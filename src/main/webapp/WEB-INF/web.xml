@@ -1,0 +1,79 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+	   <servlet>
+		  	<servlet-name>ReportingServlet</servlet-name>
+		  	<display-name>ReportingServlet</display-name>
+		  	<description></description>
+		  	<servlet-class>JasperServlets.ReportingServlet</servlet-class>
+	  </servlet>
+	  <servlet>
+			<servlet-name>ImageServlet</servlet-name>
+			<servlet-class>net.sf.jasperreports.j2ee.servlets.ImageServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>OdtServlet</servlet-name>
+		<servlet-class>net.sf.jasperreports.j2ee.servlets.OdtServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>OdsServlet</servlet-name>
+		<servlet-class>net.sf.jasperreports.j2ee.servlets.OdsServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>Xml4SwfServlet</servlet-name>
+		<servlet-class>net.sf.jasperreports.j2ee.servlets.Xml4SwfServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>WebInteractive</servlet-name>
+		<display-name>WebInteractive</display-name>
+		<description></description>
+		<servlet-class>JasperServlets.WebInteractive</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>DownloadManager</servlet-name>
+		<display-name>DownloadManager</display-name>
+		<description></description>
+		<servlet-class>JasperServlets.DownloadManager</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>DonwloadManager</servlet-name>
+		<display-name>DonwloadManager</display-name>
+		<description></description>
+		<servlet-class>JasperServlets.DonwloadManager</servlet-class>
+	</servlet>
+  <servlet-mapping>
+  	<servlet-name>ReportingServlet</servlet-name>
+  	<url-pattern>/ReportingServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ImageServlet</servlet-name>
+    <url-pattern>/servlets/image</url-pattern>
+   </servlet-mapping>
+   <servlet-mapping>
+		<servlet-name>Xml4SwfServlet</servlet-name>
+		<url-pattern>/servlets/xml4swf</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>OdtServlet</servlet-name>
+		<url-pattern>/servlets/odt</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>OdsServlet</servlet-name>
+		<url-pattern>/servlets/ods</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>WebInteractive</servlet-name>
+		<url-pattern>/WebInteractive</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DownloadManager</servlet-name>
+		<url-pattern>/DownloadManager</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DonwloadManager</servlet-name>
+		<url-pattern>/DonwloadManager</url-pattern>
+	</servlet-mapping>
+</web-app>
