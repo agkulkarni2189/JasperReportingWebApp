@@ -26,24 +26,6 @@
 		<servlet-name>Xml4SwfServlet</servlet-name>
 		<servlet-class>net.sf.jasperreports.j2ee.servlets.Xml4SwfServlet</servlet-class>
 	</servlet>
-	<servlet>
-		<servlet-name>WebInteractive</servlet-name>
-		<display-name>WebInteractive</display-name>
-		<description></description>
-		<servlet-class>JasperServlets.WebInteractive</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>DownloadManager</servlet-name>
-		<display-name>DownloadManager</display-name>
-		<description></description>
-		<servlet-class>JasperServlets.DownloadManager</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>DonwloadManager</servlet-name>
-		<display-name>DonwloadManager</display-name>
-		<description></description>
-		<servlet-class>JasperServlets.DonwloadManager</servlet-class>
-	</servlet>
   <servlet-mapping>
   	<servlet-name>ReportingServlet</servlet-name>
   	<url-pattern>/ReportingServlet</url-pattern>
@@ -63,17 +45,5 @@
 	<servlet-mapping>
 		<servlet-name>OdsServlet</servlet-name>
 		<url-pattern>/servlets/ods</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>WebInteractive</servlet-name>
-		<url-pattern>/WebInteractive</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>DownloadManager</servlet-name>
-		<url-pattern>/DownloadManager</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>DonwloadManager</servlet-name>
-		<url-pattern>/DonwloadManager</url-pattern>
 	</servlet-mapping>
 </web-app>

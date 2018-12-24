@@ -29,5 +29,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="D:/Aniket/Jasper/DemoApp/Microsoft JDBC Driver 6.0 for SQL Server/sqljdbc_6.0/enu/jre8/sqljdbc42.jar"/>
+	<classpathentry kind="lib" path="D:/Aniket/Jasper/jasperreports-6.7.0/dist/jasperreports-6.7.0.jar"/>
+	<classpathentry kind="lib" path="D:/Aniket/Jasper/jasperreports-6.7.0/dist/jasperreports-fonts-6.7.0.jar"/>
+	<classpathentry kind="lib" path="D:/Aniket/Jasper/jasperreports-6.7.0/dist/jasperreports-javaflow-6.7.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

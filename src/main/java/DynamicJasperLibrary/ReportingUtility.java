@@ -2,21 +2,14 @@ package DynamicJasperLibrary;
 
 import java.awt.Color;
 import java.sql.Date;
-import java.sql.Timestamp;
-
-import org.exolab.castor.types.DateTime;
-
 import ar.com.fdvs.dj.core.DJConstants;
 import ar.com.fdvs.dj.domain.DynamicReport;
 import ar.com.fdvs.dj.domain.Style;
 import ar.com.fdvs.dj.domain.builders.FastReportBuilder;
 import ar.com.fdvs.dj.domain.constants.Font;
 import ar.com.fdvs.dj.domain.constants.HorizontalAlign;
-import ar.com.fdvs.dj.domain.constants.Stretching;
 import ar.com.fdvs.dj.domain.constants.Transparency;
 import ar.com.fdvs.dj.domain.constants.VerticalAlign;
-import ar.com.fdvs.dj.domain.builders.*;
-import ar.com.fdvs.dj.core.layout.*;
 import ar.com.fdvs.dj.domain.builders.ColumnBuilder;
 import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
 ;
@@ -27,74 +20,9 @@ public class ReportingUtility {
 	}
 		// TODO Auto-generated constructor stub
 		
-	public DynamicReport buildReport(String QueryConditions) throws Exception
+	public DynamicReport buildReport(String LocationID, String LaneTypeID, String LaneID) throws Exception
 	{	
-		String DBQuery = "WITH Lane_Trans_CTE\r\n" + 
-				"AS\r\n" + 
-				"(\r\n" + 
-				"	SELECT \r\n" + 
-				"		tt.rfid_transaction_id,\r\n" + 
-				"		tt.tag_id,\r\n" + 
-				"		tt.boom_up_request_source,\r\n" + 
-				"		tt.ack_sent_time,\r\n" + 
-				"		tt.hht_boomup_request_recd_time,\r\n" + 
-				"		tt.rfid_boomup_request_recd_time,\r\n" + 
-				"		lm.lane_name,\r\n" + 
-				"		lm.lane_id,\r\n" + 
-				"		lm.lane_type_id \r\n" + 
-				"	FROM\r\n" + 
-				"		rfid_transaction_table tt\r\n" + 
-				"	LEFT OUTER JOIN\r\n" + 
-				"		lane_master lm\r\n" + 
-				"	ON\r\n" + 
-				"		tt.lane_id=lm.lane_id\r\n" + 
-				"),\r\n" + 
-				"Lane_Type_CTE AS\r\n" + 
-				"(\r\n" + 
-				"	SELECT \r\n" + 
-				"		ltc.*, \r\n" + 
-				"		ltm.lane_type_name \r\n" + 
-				"	FROM \r\n" + 
-				"		Lane_Trans_CTE ltc \r\n" + 
-				"	LEFT OUTER JOIN \r\n" + 
-				"		lane_type_master ltm \r\n" + 
-				"	ON \r\n" + 
-				"		ltc.lane_type_id=ltm.lane_type_id\r\n" + 
-				"),\r\n" + 
-				"Location_Type_CTE AS\r\n" + 
-				"(\r\n" + 
-				"	SELECT \r\n" + 
-				"		ltc.*, \r\n" + 
-				"		llm.location_id \r\n" + 
-				"	FROM \r\n" + 
-				"		Lane_Type_CTE ltc \r\n" + 
-				"	LEFT OUTER JOIN \r\n" + 
-				"		location_lane_type_mapping llm \r\n" + 
-				"	ON \r\n" + 
-				"		ltc.lane_type_id = llm.lane_type_id\r\n" + 
-				")\r\n" + 
-				"\r\n" + 
-				"SELECT \r\n" + 
-				"	ltc.rfid_transaction_id, \r\n" + 
-				"	ltc.tag_id,ltc.boom_up_request_source, \r\n" + 
-				"	ltc.ack_sent_time, \r\n" + 
-				"	ltc.hht_boomup_request_recd_time, \r\n" + 
-				"	ltc.rfid_boomup_request_recd_time, \r\n" + 
-				"	ltc.lane_name, \r\n" + 
-				"	ltc.lane_type_name, \r\n" + 
-				"	lm.location_name \r\n" + 
-				"FROM \r\n" + 
-				"	Location_Type_CTE \r\n" + 
-				"AS \r\n" + 
-				"	ltc \r\n" + 
-				"LEFT OUTER JOIN \r\n" + 
-				"	location_master lm \r\n" + 
-				"ON \r\n" + 
-				"	ltc.location_id = lm.location_id";
-		
-		if(QueryConditions != null && QueryConditions.length() > 0)
-			DBQuery += QueryConditions;
-		
+		StringBuilder sb = new StringBuilder();
 		Style HeaderStyle = new Style();
 		HeaderStyle.setHorizontalAlign(HorizontalAlign.CENTER);
 		HeaderStyle.setVerticalAlign(VerticalAlign.MIDDLE);
@@ -117,6 +45,86 @@ public class ReportingUtility {
 		ContentFont.setFontName(Font.ARIAL_SMALL.getFontName());
 		ContentFont.setFontSize(13.0f);
 		ContentStyle.setFont(ContentFont);
+		
+		String DBQuery = "With"
+				+ " LaneTrans_CTE As("
+				+ "SELECT "
+				+ "tt.tag_id, "
+				+ "tt.boom_up_request_source, "
+				+ "tt.ack_sent_time, "
+				+ "tt.hht_boomup_request_recd_time, "
+				+ "tt.rfid_boomup_request_recd_time, "
+				+ "lm.lane_id, "
+				+ "lm.lane_type_id, "
+				+ "lm.lane_name "
+				+ "FROM "
+				+ "rfid_transaction_table tt "
+				+ "LEFT OUTER JOIN "
+				+ "lane_master lm "
+				+ "ON "
+				+ "tt.lane_id=lm.lane_id"
+				+ "),"
+				+ "LaneLaneType_CTE As("
+				+ "SELECT ltc.*, "
+				+ "ltm.lane_type_name "
+				+ "from LaneTrans_CTE ltc "
+				+ "LEFT OUTER JOIN "
+				+ "lane_type_master ltm "
+				+ "ON "
+				+ "ltc.lane_type_id=ltm.lane_type_id"
+				+ "),"
+				+ "LaneTypeLocation_CTE As("
+				+ "SELECT llt.*, "
+				+ "llm.location_id "
+				+ "FROM "
+				+ "LaneLaneType_CTE llt "
+				+ "LEFT OUTER JOIN "
+				+ "location_lane_type_mapping llm "
+				+ "ON "
+				+ "llt.lane_type_id=llm.lane_type_id"
+				+ ") "
+				+ "SELECT "
+				+ "ltlc.tag_id, "
+				+ "ltlc.boom_up_request_source, "
+				+ "ltlc.ack_sent_time, "
+				+ "ltlc.hht_boomup_request_recd_time, "
+				+ "ltlc.rfid_boomup_request_recd_time, "
+				+ "ltlc.lane_name, "
+				+ "lm.location_name, "
+				+ "ltlc.lane_type_name "
+				+ "FROM "
+				+ "LaneTypeLocation_CTE ltlc "
+				+ "LEFT OUTER JOIN "
+				+ "location_master lm "
+				+ "ON "
+				+ "ltlc.location_id=lm.location_id";
+		
+		if(LocationID != null && !LocationID.isEmpty())
+		{
+			if(sb.length() <= 0)
+				sb.append(" WHERE ltlc.location_id = "+LocationID);
+			else
+				sb.append(" AND ltlc.location_ID = "+LocationID);
+		}
+		
+		if(LaneTypeID != null && !LaneTypeID.isEmpty())
+		{
+			if(sb.length() <= 0)
+				sb.append(" WHERE ltlc.lane_type_id = "+LaneTypeID);
+			else
+				sb.append(" AND ltlc.lane_type_id = "+LaneTypeID);
+		}
+		
+		if(LaneID != null && !LaneID.isEmpty())
+		{
+			if(sb.length() > 0)
+				sb.append(" AND ltlc.lane_id = "+LaneID);
+			else
+				sb.append(" WHERE ltlc.lane_id = "+LaneID);
+		}
+		
+		if(sb.length() > 0)
+			DBQuery += sb.toString();
 		
 		AbstractColumn TagIDCol = ColumnBuilder
 								.getNew()
@@ -183,9 +191,8 @@ public class ReportingUtility {
 				.addColumn(Lane)
 				.addColumn(Lane_Type_Name)
 				.addColumn(Location)
-				.setTitleStyle(HeaderStyle)
-				.setDefaultStyles(null, null, HeaderStyle, ContentStyle)
 				.setQuery(DBQuery, DJConstants.QUERY_LANGUAGE_SQL)
+				.setDefaultStyles(null, null, HeaderStyle, ContentStyle)
 				.setUseFullPageWidth(false);
 		
 		return frb.build();
