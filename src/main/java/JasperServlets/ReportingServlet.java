@@ -9,7 +9,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -72,6 +75,7 @@ public class ReportingServlet extends HttpServlet {
 		HashMap<String, String> Location_Master = new HashMap<String, String>();
 		HashMap<String, String> Lane_Type_Master = new HashMap<String, String>();
 		HashMap<String, String> Lane_Master = new HashMap<String, String>();
+		List<String> TransIDs = new ArrayList<String>();
 		String LocationID = null;
 		String LaneTypeID = null;
 		String LaneID = null;
@@ -79,6 +83,7 @@ public class ReportingServlet extends HttpServlet {
 		ServletContext context = this.getServletConfig().getServletContext();
 		response.setContentType("text/html");
 		StringWriter sw = new StringWriter();
+		PrintWriter JasperReportWriter = new PrintWriter(sw);
 
 		try {
 			ResultSet rs = DBUtility.getRecordsFromDB("SELECT location_id, location_name from location_master");
@@ -109,25 +114,12 @@ public class ReportingServlet extends HttpServlet {
 			while (rs.next()) {
 				Lane_Master.put(rs.getString("lane_id"), rs.getString("lane_name"));
 			}
-
+			
 			request.setAttribute("Lane_Master", Lane_Master);
 			request.setAttribute("ReportTitle", "Transactions Report");
 
-			PrintWriter JasperReportWriter = new PrintWriter(new String());
 			JasperPrint jp = getFilteredReportPrint(LocationID, LaneTypeID, LaneID);
-
-			request.getSession().setAttribute(BaseHttpServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE, jp);
-			HtmlExporter exporter = new HtmlExporter();
-			request.getSession().setAttribute(ImageServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE, jp);
-			exporter.setExporterInput(new SimpleExporterInput(jp));
-
-			SimpleHtmlExporterOutput output = new SimpleHtmlExporterOutput(sw);
-			output.setImageHandler(new WebHtmlResourceHandler("servlets/image?image={0}"));
-			exporter.setExporterOutput(output);
-
-			exporter.exportReport();
-			request.setAttribute("MainReport", sw.toString());
-
+			
 			if (request.getParameterMap().containsKey("ExportOption")) {
 				int ExportOption = Integer.parseInt((String) request.getParameter("ExportOption"));
 				ByteArrayOutputStream ReportStream = new ByteArrayOutputStream();
@@ -158,6 +150,19 @@ public class ReportingServlet extends HttpServlet {
 					}
 				}
 			}
+
+			request.getSession().setAttribute(BaseHttpServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE, jp);
+			HtmlExporter exporter = new HtmlExporter();
+			request.getSession().setAttribute(ImageServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE, jp);
+			exporter.setExporterInput(new SimpleExporterInput(jp));
+
+			SimpleHtmlExporterOutput output = new SimpleHtmlExporterOutput(JasperReportWriter);
+			output.setImageHandler(new WebHtmlResourceHandler("servlets/image?image={0}"));
+			exporter.setExporterOutput(output);
+
+			exporter.exportReport();
+			request.getSession().setAttribute("MainReport", sw.toString());
+
 
 		} catch (JRException jre) {
 			// writer.println(jre.getMessage());
